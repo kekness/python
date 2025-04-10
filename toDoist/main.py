@@ -20,7 +20,14 @@ args = parser.parse_args()
 if args.add:
     title = " ".join(args.add)
     description = args.desc or ""
-    priority = int(args.priority) if args.priority else 1
+    completed = False
+    priority = 1
+    if args.priority:
+        try:
+            priority = int(args.priority)
+        except ValueError:
+            print("Priority must be an integer.")
+            exit()
     due_date = None
 
     if args.due:
@@ -30,16 +37,14 @@ if args.add:
             print("Wrong date format. Use YYYY-MM-DD_HH:MM")
             exit()
 
-    new_task = Task(title, description, due_date, priority)
+    new_task = Task(title, description, due_date,completed,priority)
     manager.add_task(new_task)
     manager.save_to_file()
     print(f"Task submitted: {title}")
 
-# Wyświetlanie listy
 elif args.list:
     manager.read_tasks()
 
-# Oznaczanie jako ukończone
 elif args.complete:
     index = args.complete - 1
     if 0 <= index < len(manager.tasks):
