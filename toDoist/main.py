@@ -15,7 +15,7 @@ parser.add_argument("--list", action="store_true", help="Show tasks from a speci
 parser.add_argument("--complete", metavar="NUMBER", type=int, help="Finish task")
 parser.add_argument("--filter", metavar="BY", choices=["priority", "due", "created"], help="Sort tasks by: priority, due, created")
 parser.add_argument("--listname", metavar="NAME", default="tasks", help="Choose task list (default: 'tasks')")
-parser.add_argument("--all", action="store_true", help="Show tasks from all lists")
+parser.add_argument("--all", action="store_true", help="Show tasks from all lists but only uncompleted ones")
 parser.add_argument("--showall", action="store_true", help="Show all tasks, including completed ones")
 parser.add_argument("--delete", metavar="NUMBER", type=int, help="Delete a task by its number")
 
