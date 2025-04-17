@@ -3,7 +3,6 @@ from TaskManager import TaskManager
 from Task import Task
 import argparse
 import os
-import glob
 
 parser = argparse.ArgumentParser(description="Welcome to ToDoist")
 
