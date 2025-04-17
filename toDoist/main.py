@@ -16,6 +16,8 @@ parser.add_argument("--complete", metavar="NUMBER", type=int, help="Finish task"
 parser.add_argument("--filter", metavar="BY", choices=["priority", "due", "created"], help="Sort tasks by: priority, due, created")
 parser.add_argument("--listname", metavar="NAME", default="tasks", help="Choose task list (default: 'tasks')")
 parser.add_argument("--all", action="store_true", help="Show tasks from all lists")
+parser.add_argument("--showall", action="store_true", help="Show all tasks, including completed ones")
+
 
 args = parser.parse_args()
 
@@ -37,7 +39,8 @@ if args.all:
             elif args.filter == "created":
                 indexed_tasks.sort(key=lambda x: x[1].created_at)
         for i, (real_index, task) in enumerate(indexed_tasks, 1):
-            print(f"{real_index + 1}. {task}")
+            if args.showall or not task.completed:
+                 print(f"{real_index + 1}. {task}")
         print()
     exit()
 
@@ -89,9 +92,10 @@ elif args.list:
         elif args.filter == "created":
             indexed_tasks.sort(key=lambda x: x[1].created_at)
 
-    print(f"📂 List: {args.listname}")
+    print(f" List: {args.listname}")
     for i, (real_index, task) in enumerate(indexed_tasks, 1):
-        print(f"{real_index + 1}. {task}")
+        if args.showall or not task.completed:
+             print(f"{real_index + 1}. {task}")
 
 else:
     parser.print_help()
