@@ -17,6 +17,7 @@ parser.add_argument("--filter", metavar="BY", choices=["priority", "due", "creat
 parser.add_argument("--listname", metavar="NAME", default="tasks", help="Choose task list (default: 'tasks')")
 parser.add_argument("--all", action="store_true", help="Show tasks from all lists")
 parser.add_argument("--showall", action="store_true", help="Show all tasks, including completed ones")
+parser.add_argument("--delete", metavar="NUMBER", type=int, help="Delete a task by its number")
 
 
 args = parser.parse_args()
@@ -72,6 +73,15 @@ if args.add:
     manager.add_task(new_task)
     manager.save_to_file(filename)
     print(f"Task submitted to '{args.listname}': {title}")
+
+elif args.delete:
+    index = args.delete - 1
+    if 0 <= index < len(manager.tasks):
+        deleted_task = manager.tasks.pop(index)
+        manager.save_to_file(filename)
+        print(f"Deleted task {args.delete} from '{args.listname}': {deleted_task.title}")
+    else:
+        print(f"No such task to delete in '{args.listname}'.")
 
 elif args.complete:
     index = args.complete - 1
