@@ -14,6 +14,7 @@ parser.add_argument("--due", metavar="YYYY-MM-DD_HH:MM", help ="Set due date")
 parser.add_argument("--priority",metavar="INT", help= "set priority")
 parser.add_argument("--list", action="store_true",help="Show all tasks")
 parser.add_argument("--complete", metavar="NUMBER",type=int,help="Finish task")
+parser.add_argument("--filter", metavar="BY", choices=["priority", "due", "created"], help="Sort tasks by: priority, due, created")
 
 args = parser.parse_args()
 
@@ -42,9 +43,6 @@ if args.add:
     manager.save_to_file()
     print(f"Task submitted: {title}")
 
-elif args.list:
-    manager.read_tasks()
-
 elif args.complete:
     index = args.complete - 1
     if 0 <= index < len(manager.tasks):
@@ -53,6 +51,21 @@ elif args.complete:
         print(f"Task {args.complete} marked as finished.")
     else:
         print(f"No such task was found")
+
+elif args.list:
+    indexed_tasks = list(enumerate(manager.tasks))  # (index, task)
+
+    if args.filter:
+        if args.filter == "priority":
+            indexed_tasks.sort(key=lambda x: x[1].priority)
+        elif args.filter == "due":
+            indexed_tasks.sort(key=lambda x: x[1].due_date or datetime.max)
+        elif args.filter == "created":
+            indexed_tasks.sort(key=lambda x: x[1].created_at)
+
+    for i, (real_index, task) in enumerate(indexed_tasks, 1):
+        print(f"{real_index + 1}. {task}")
+
 
 else:
     parser.print_help()
